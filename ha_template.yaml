@@ -13,8 +13,8 @@ sensor:
             work
           {% elif device.startswith("store_") %}
             store
-          {% elif device.startswith("parents_") %}
-            parents
+          {% elif device.startswith("family_") %}
+            family
           {% elif device == "not_home" and speed >= 5 %}
             travelling
           {% else %}
@@ -32,8 +32,8 @@ sensor:
             work
           {% elif device.startswith("store_") %}
             store
-          {% elif device.startswith("parents_") %}
-            parents
+          {% elif device.startswith("family_") %}
+            family
           {% elif device == "not_home" and speed >= 5 %}
             travelling
           {% else %}
