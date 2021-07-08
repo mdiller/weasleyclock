@@ -1,0 +1,42 @@
+sensor:
+  - platform: template
+    sensors: 
+      amanda_location:
+        friendly_name: "Amanda's Location"
+        value_template: >-
+          {% set device_id = "device_tracker.iphone" %}
+          {% set device = states(device_id) %}
+          {% set speed = 0 if state_attr(device_id, "speed") == None else state_attr(device_id, "speed") %}
+          {% if device == "home" %}
+            home
+          {% elif device == "work" %}
+            work
+          {% elif device.startswith("store_") %}
+            store
+          {% elif device.startswith("parents_") %}
+            parents
+          {% elif device == "not_home" and speed >= 5 %}
+            travelling
+          {% else %}
+            lost
+          {% endif %}
+      malcolm_location:
+        friendly_name: "Malcolm's Location"
+        value_template: >-
+          {% set device_id = "device_tracker.malcolm_s_phone" %}
+          {% set device = states(device_id) %}
+          {% set speed = 0 if state_attr(device_id, "speed") == None else state_attr(device_id, "speed") %}
+          {% if device == "home" %}
+            home
+          {% elif device == "work" %}
+            work
+          {% elif device.startswith("store_") %}
+            store
+          {% elif device.startswith("parents_") %}
+            parents
+          {% elif device == "not_home" and speed >= 5 %}
+            travelling
+          {% else %}
+            lost
+          {% endif %}
+
