@@ -1,10 +1,25 @@
 sensor:
   - platform: template
-    sensors: 
-      amanda_location:
+    sensors:
+      test_speed:
+        unit_of_measurement: "°C"
+        value_template: >
+          {{ 0 if state_attr("device_tracker.malcolm_s_phone", "speed") == None else state_attr("device_tracker.malcolm_s_phone", "speed") }}
+      test_latitude:
+        unit_of_measurement: "°C"
+        value_template: >
+          {{ state_attr("device_tracker.malcolm_s_phone", "latitude") }}
+      test_longitude:
+        unit_of_measurement: "°C"
+        value_template: >
+          {{ state_attr("device_tracker.malcolm_s_phone", "longitude") }}
+      amanda_clock_location:
         friendly_name: "Amanda's Location"
         value_template: >-
+          {% set sensor_id = "sensor.amanda_clock_location" %}
           {% set device_id = "device_tracker.iphone" %}
+
+          {% set recently_speedy = state_attr(sensor_id, "speed_timestamp") != None and now().timestamp() - state_attr(sensor_id, "speed_timestamp") < (5 * 60) %}
           {% set device = states(device_id) %}
           {% set speed = 0 if state_attr(device_id, "speed") == None else state_attr(device_id, "speed") %}
           {% if device == "home" %}
@@ -15,15 +30,29 @@ sensor:
             store
           {% elif device.startswith("family_") %}
             family
-          {% elif device == "not_home" and speed >= 5 %}
+          {% elif speed >= 5 or recently_speedy %}
             travelling
           {% else %}
             lost
           {% endif %}
-      malcolm_location:
+        attribute_templates:
+          speed_timestamp: >-
+            {% set sensor_id = "sensor.amanda_clock_location" %}
+            {% set device_id = "device_tracker.iphone" %}
+
+            {% set speed = 0 if state_attr(device_id, "speed") == None else state_attr(device_id, "speed") %}
+            {% if speed >= 5 %}
+              {{now().timestamp()}}
+            {% else %}
+              {{state_attr(sensor_id, "speed_timestamp")}}
+            {% endif %}
+      malcolm_clock_location:
         friendly_name: "Malcolm's Location"
         value_template: >-
+          {% set sensor_id = "sensor.malcolm_clock_location" %}
           {% set device_id = "device_tracker.malcolm_s_phone" %}
+
+          {% set recently_speedy = state_attr(sensor_id, "speed_timestamp") != None and now().timestamp() - state_attr(sensor_id, "speed_timestamp") < (5 * 60) %}
           {% set device = states(device_id) %}
           {% set speed = 0 if state_attr(device_id, "speed") == None else state_attr(device_id, "speed") %}
           {% if device == "home" %}
@@ -34,9 +63,20 @@ sensor:
             store
           {% elif device.startswith("family_") %}
             family
-          {% elif device == "not_home" and speed >= 5 %}
+          {% elif speed >= 5 or recently_speedy %}
             travelling
           {% else %}
             lost
           {% endif %}
+        attribute_templates:
+          speed_timestamp: >-
+            {% set sensor_id = "sensor.malcolm_clock_location" %}
+            {% set device_id = "device_tracker.malcolm_s_phone" %}
+
+            {% set speed = 0 if state_attr(device_id, "speed") == None else state_attr(device_id, "speed") %}
+            {% if speed >= 5 %}
+              {{now().timestamp()}}
+            {% else %}
+              {{state_attr(sensor_id, "speed_timestamp")}}
+            {% endif %}
 
