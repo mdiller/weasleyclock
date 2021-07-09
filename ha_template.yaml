@@ -79,4 +79,11 @@ sensor:
             {% else %}
               {{state_attr(sensor_id, "speed_timestamp")}}
             {% endif %}
-
+rest_command:
+  trigger_clock:
+    url: http://192.168.0.120/moveHand
+    method: POST
+    headers:
+      accept: "application/json, text/html"
+    payload: '{"hand": "{{ hand }}","location": "{{ location }}"}'
+    content_type:  'application/json; charset=utf-8'
