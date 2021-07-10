@@ -109,7 +109,7 @@ Note also that for the WIFI name and password, I stored those in a separate file
 
 ## Home Assistant
 
-I decided to use home assistent for the "backend" of this project because I already had one set up and wanted to do some more stuff with it and learn how to use it for things like this. I was disappointed with the lack of code sharing that seems to be available, and ended up duplicating a bunch of code for the "sensor" stuff that I ended up using. There might be a better way to do this but I couldn't find a way that would be lightweight but also fix this duplication problem.
+For those who are unfamiliar, [home assistant](https://www.home-assistant.io/) is an open source automation platform that lets you run the main server locally without having to connect to a cloud service. I decided to use home assistent for the "backend" of this project because I already had one set up (running in a docker container on an old pc) and wanted to do some more stuff with it and learn how to use it for things like this. I was disappointed with the lack of modularity that seems to be available, and ended up duplicating a bunch of code for the "sensor" stuff that I ended up using. There might be a better way to do this but I couldn't find a way that would be lightweight but also fix this duplication problem.
 
 I started out by setting up my home assistant app on my phone so that it was reporting its location back. Home assistant has a nice default way of doing this where it reports back the information and stores it in a "device_tracker" entity. By default home assistant tries to assign the "state" of the device_tracker entity to one of the zones that you configure, and if it doesn't fit any of the zones, it gives it a state of not_home. 
 
