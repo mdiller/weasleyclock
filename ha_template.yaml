@@ -1,18 +1,6 @@
 sensor:
   - platform: template
     sensors:
-      test_speed:
-        unit_of_measurement: "°C"
-        value_template: >
-          {{ 0 if state_attr("device_tracker.malcolm_s_phone", "speed") == None else state_attr("device_tracker.malcolm_s_phone", "speed") }}
-      test_latitude:
-        unit_of_measurement: "°C"
-        value_template: >
-          {{ state_attr("device_tracker.malcolm_s_phone", "latitude") }}
-      test_longitude:
-        unit_of_measurement: "°C"
-        value_template: >
-          {{ state_attr("device_tracker.malcolm_s_phone", "longitude") }}
       amanda_clock_location:
         friendly_name: "Amanda's Location"
         value_template: >-
@@ -24,7 +12,7 @@ sensor:
           {% set speed = 0 if state_attr(device_id, "speed") == None else state_attr(device_id, "speed") %}
           {% if device == "home" %}
             home
-          {% elif device == "work" %}
+          {% elif device.startswith("work_") %}
             work
           {% elif device.startswith("store_") %}
             store
@@ -57,7 +45,7 @@ sensor:
           {% set speed = 0 if state_attr(device_id, "speed") == None else state_attr(device_id, "speed") %}
           {% if device == "home" %}
             home
-          {% elif device == "work" %}
+          {% elif device.startswith("work_") %}
             work
           {% elif device.startswith("store_") %}
             store

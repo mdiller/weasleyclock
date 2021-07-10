@@ -8,7 +8,6 @@
 
 #include "config.h"
 
-
 #define STEPS_PER_REVOLUTION 2038
 
 // Pins from https://chewett.co.uk/blog/1066/pin-numbering-for-wemos-d1-mini-esp8266/
@@ -146,20 +145,36 @@ void moveHand() {
 		position = getClockPositionFromLocation(location);
 	}
 
+	// Calculate step position
 	int stepPos = round((position / 12) * STEPS_PER_REVOLUTION);
 
-	// Step the hand for given steps
+	// Identify which hand to move
+	AccelStepper *handToMove;
 	if (hand == 1) {
-		hand1Stepper.moveTo(stepPos);
+		handToMove = &hand1Stepper;
 	}
 	else if (hand == 2) {
     stepPos = 0 - stepPos; // this one interacts with a gear, so we want it to spin the other way
-		hand2Stepper.moveTo(stepPos);
+		handToMove = &hand2Stepper;
 	}
 	else {
 		server.send(400, "text/plain", "Invalid hand");
 		return;
 	}
+
+	// adjust the position to the one that would require the least amount of travel
+	int currentPosition = handToMove->currentPosition();
+	while (abs(currentPosition - stepPos) > (STEPS_PER_REVOLUTION / 2)) {
+		if (stepPos > currentPosition) {
+			stepPos -= STEPS_PER_REVOLUTION;
+		}
+		else {
+			stepPos += STEPS_PER_REVOLUTION;
+		}
+	}
+
+	// move the hand
+	handToMove->moveTo(stepPos);
 
 	String message = "moveHand()";
 	message += "\n    hand: " + String(hand);
