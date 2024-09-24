@@ -18,7 +18,7 @@ sensor:
             store
           {% elif device.startswith("family_") %}
             family
-          {% elif speed >= 5 or recently_speedy %}
+          {% elif speed >= 3 or recently_speedy %}
             travelling
           {% else %}
             lost
@@ -29,7 +29,7 @@ sensor:
             {% set device_id = "device_tracker.iphone" %}
 
             {% set speed = 0 if state_attr(device_id, "speed") == None else state_attr(device_id, "speed") %}
-            {% if speed >= 5 %}
+            {% if speed >= 3 %}
               {{now().timestamp()}}
             {% else %}
               {{state_attr(sensor_id, "speed_timestamp")}}
@@ -51,7 +51,7 @@ sensor:
             store
           {% elif device.startswith("family_") %}
             family
-          {% elif speed >= 5 or recently_speedy %}
+          {% elif speed >= 3 or recently_speedy %}
             travelling
           {% else %}
             lost
@@ -62,7 +62,7 @@ sensor:
             {% set device_id = "device_tracker.malcolm_s_phone" %}
 
             {% set speed = 0 if state_attr(device_id, "speed") == None else state_attr(device_id, "speed") %}
-            {% if speed >= 5 %}
+            {% if speed >= 3 %}
               {{now().timestamp()}}
             {% else %}
               {{state_attr(sensor_id, "speed_timestamp")}}
